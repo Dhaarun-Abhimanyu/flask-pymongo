@@ -5,30 +5,29 @@ from dotenv import load_dotenv
 load_dotenv()
 
 mongo_uri = os.getenv("MONGO_URI")
-
 client = MongoClient(mongo_uri)
-db = client['test']
-users_collection = db['users']
 
-# Create operation: Insert a new user
-def create_user():
-    user_data = {
-        "name": "darshan",
-        "email": "huh",
-        "age": 28
+db = client['ghcc']
+collection = db['hacktolearn']
+
+#CREATE operation
+collection.insert_one({
+    "name": "YOUR_NAME",
+    "age": 0, #insert your age here
+    "cool_fact": "I can bend my thumb backwards and touch my wrist"
+})
+
+#READ
+records = collection.find()
+for record in records:
+    print(record)
+
+#UPDATE
+collection.update_many({
+    "name": "YOUR_NAME"  #The record you wanna change
+},
+{
+    "$set": {
+        "cool_fact": "I dont have any :(" #The change to be made
     }
-    result = users_collection.insert_one(user_data)
-    print(f"User created with id: {result.inserted_id}")
-
-# Read operation: Fetch all users
-def read_users():
-    users = users_collection.find()
-    for user in users:
-        print(user)
-
-# Call the functions
-create_user()
-read_users()   # To read all users
-
-# Close the connection
-client.close()
+})
